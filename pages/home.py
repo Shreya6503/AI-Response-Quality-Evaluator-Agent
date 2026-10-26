@@ -304,9 +304,9 @@ with hero_left:
 
     with b1:
         if st.button(
-            "▶  Start Evaluation",
+            "▶  Evaluate response",
             type="primary",
-            use_container_width=True,
+            width="stretch",
         ):
             st.switch_page("pages/evaluation_hub.py")
 
