@@ -1,3 +1,4 @@
+
 import streamlit as st
 
 st.set_page_config(
@@ -26,25 +27,61 @@ html, body, [class*="css"] {
     max-width: 1600px;
 }
 
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #142441 0%, #0D1930 100%);
+}
+
+[data-testid="stSidebar"] * {
+    color: #EDF3FF;
+}
+
+[data-testid="stSidebar"] .stButton button {
+    text-align: left;
+    background: transparent;
+    border: none;
+    color: #E5EDFF;
+    border-radius: 9px;
+    padding: 0.65rem;
+}
+
+[data-testid="stSidebar"] .stButton button:hover {
+    background: #244B91;
+    border: none;
+}
+
+.brand {
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.3;
+    color: white;
+}
+
+.brand-sub {
+    font-size: 12px;
+    color: #B8C6DE;
+    margin-top: 8px;
+    margin-bottom: 25px;
+}
+
 .project-banner {
     display: flex;
     align-items: center;
     gap: 16px;
-    min-height: 112px;
-    padding: 22px 28px;
-    margin: 32px 0 28px;
-    border-radius: 14px;
+    min-height: 104px;
+    padding: 20px 26px;
+    margin: 32px 0 26px;
+    border-radius: 16px;
     background: linear-gradient(100deg, #10264B, #2459A9);
 }
 
-.project-banner-icon {
+.project-logo {
     display: grid;
     place-items: center;
-    flex: 0 0 60px;
-    height: 60px;
-    border-radius: 12px;
+    flex: 0 0 58px;
+    height: 58px;
+    border-radius: 14px;
     background: rgba(255, 255, 255, 0.14);
-    font-size: 38px;
+    font-size: 34px;
 }
 
 .project-banner h1 {
@@ -255,14 +292,14 @@ html, body, [class*="css"] {
         padding: 1rem;
     }
     .project-banner {
-        min-height: 100px;
-        padding: 18px 16px;
+        min-height: 92px;
+        padding: 16px;
         gap: 12px;
     }
-    .project-banner-icon {
+    .project-logo {
         flex-basis: 48px;
         height: 48px;
-        font-size: 30px;
+        font-size: 29px;
     }
     .hero {
         padding: 23px 18px;
@@ -271,10 +308,74 @@ html, body, [class*="css"] {
 </style>
 """, unsafe_allow_html=True)
 
+
+# ---------- Navigation ----------
+if "page" not in st.session_state:
+    st.session_state.page = "Home"
+
+def go_to(page):
+    st.session_state.page = page
+
+with st.sidebar:
+    st.markdown(
+        '<div class="brand">🛡️ AI Response<br>Evaluator</div>'
+        '<div class="brand-sub">Quality assessment platform</div>',
+        unsafe_allow_html=True,
+    )
+
+    # st.divider()
+
+    pages = [
+        ("🏠", "Home"),
+        ("⚗️", "Evaluation Hub"),
+        ("📊", "Results & Analytics"),
+        ("▤", "Knowledge Base"),
+        ("📄", "Reports & Documentation"),
+    ]
+
+    for icon, name in pages:
+        if name == st.session_state.page:
+            st.button(
+                f"{icon}  {name}",
+                key=f"nav_{name}",
+                type="primary",
+                use_container_width=True,
+                on_click=go_to,
+                args=(name,),
+            )
+        else:
+            st.button(
+                f"{icon}  {name}",
+                key=f"nav_{name}",
+                use_container_width=True,
+                on_click=go_to,
+                args=(name,),
+            )
+
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
+    st.divider()
+    st.caption("Project Prototype")
+    st.caption("v0.1")
+
+
+# ---------- Placeholder for other pages ----------
+if st.session_state.page != "Home":
+    st.title(st.session_state.page)
+    st.info(
+        "This page is under development. "
+        "The homepage is ready for the first design milestone."
+    )
+    if st.button("← Return to Home"):
+        go_to("Home")
+        st.rerun()
+    st.stop()
+
+
+# ---------- Project banner ----------
 st.markdown(
     """
     <div class="project-banner">
-        <div class="project-banner-icon">🛡️</div>
+        <div class="project-logo" aria-hidden="true">🛡️</div>
         <div>
             <h1>AI Response Quality Evaluator Agent</h1>
             <p>Intelligent evaluation · Reliable answers · Better AI quality</p>
@@ -283,6 +384,7 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
 
 # ---------- Hero section ----------
 hero_left, hero_right = st.columns([1.55, 1])
@@ -300,13 +402,14 @@ with hero_left:
     </div>
     """, unsafe_allow_html=True)
 
+    # Buttons are placed below the hero copy.
     b1, b2 = st.columns([1, 1.25])
 
     with b1:
         if st.button(
-            "▶  Evaluate response",
+            "▶  Start Evaluation",
             type="primary",
-            width="stretch",
+            use_container_width=True,
         ):
             st.switch_page("pages/evaluation_hub.py")
 
@@ -315,7 +418,8 @@ with hero_left:
             "▦  View Results Dashboard",
             use_container_width=True,
         ):
-            st.info("Results & Analytics is still under development.")
+            go_to("Results & Analytics")
+            st.rerun()
 
 with hero_right:
     st.markdown("""

@@ -138,7 +138,7 @@ with single_tab:
             submitted = st.form_submit_button(
                 "🚀 Run Evaluation",
                 type="primary",
-                use_container_width=True
+                width="stretch"
             )
 
         if submitted:
@@ -294,7 +294,7 @@ with batch_tab:
                 st.markdown("#### Dataset preview")
                 st.dataframe(
                     df.head(100),
-                    use_container_width=True,
+                    width="stretch",
                     hide_index=True
                 )
 
@@ -314,7 +314,7 @@ with batch_tab:
                 if st.button(
                     "🚀 Run Batch Evaluation",
                     type="primary",
-                    use_container_width=True,
+                    width="stretch",
                     disabled=(valid_count == 0)
                 ):
                     valid_df = df[
@@ -356,7 +356,7 @@ with batch_tab:
         })
 
         st.markdown("#### Expected CSV format")
-        st.dataframe(example_df, use_container_width=True, hide_index=True)
+        st.dataframe(example_df, width="stretch", hide_index=True)
 
         st.download_button(
             "⬇️ Download sample CSV",
